@@ -1,3 +1,3 @@
-# Firebase Auth 🔥
-<li> ##### Register Form</li>
-<li> ##### Log In Form</li>
+# Firebase Auth 🔥 
+<li>  Register Form</li>
+<li>  Log In Form</li>
