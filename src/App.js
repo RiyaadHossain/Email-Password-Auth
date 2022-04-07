@@ -5,6 +5,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import app from "./firebase.init";
 import { useState } from "react";
@@ -52,21 +54,22 @@ function App() {
 
     if (registered) {
       signInWithEmailAndPassword(auth, email, password)
-        .then((userCrendential) => {
-          const user = userCrendential.user;
-          console.log(user);
+      .then((userCrendential) => {
+        const user = userCrendential.user;
+        console.log(user);
           console.log(name);
         })
         .catch((error) => {
           const errorMsg = error.message;
           setError(errorMsg);
         });
-    } else {
-      createUserWithEmailAndPassword(auth, email, password)
+      } else {
+        createUserWithEmailAndPassword(auth, email, password)
         .then((userCrendential) => {
           const user = userCrendential.user;
           console.log(user);
           console.log(name);
+          varifyEmail()
         })
         .catch((error) => {
           const errorMsg = error.message;
@@ -74,6 +77,18 @@ function App() {
         });
     }
   };
+  const varifyEmail = () => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+      console.log('Email Verification Sent');
+    })
+  }
+  const resetPass = () => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+      console.log('Reset Email Sent');
+    })
+  }
 
   return (
     <div className="container mt-5">
@@ -138,6 +153,9 @@ function App() {
           <Button variant="primary" type="submit">
             {registered ? "Log In" : "Sign Up"}
           </Button>
+          {registered ? <Button onClick={resetPass} className="ms-2" variant="info">
+            Forget Password
+          </Button> : ''}
         </Form>
       </div>
     </div>
