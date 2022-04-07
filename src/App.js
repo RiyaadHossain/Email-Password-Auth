@@ -9,6 +9,7 @@ const auth = getAuth(app);
 
 function App() {
   const [validated, setValidated] = useState(false);
+  const [error, setError] = useState('')
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const emailBlur = (event) => {
@@ -16,13 +17,17 @@ function App() {
   };
   const passwordBlur = (event) => {
     setPassword(event.target.value);
-    console.log(password);
   };
   const submitForm = (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
+    }
+    if (!/(?=.*[!@#$%^&*])/.test(password)) {
+      setError('* Please input at least one Special character')
+    } else {
+      setError('')
     }
 
     setValidated(true);
@@ -36,7 +41,6 @@ function App() {
         const errorMsg = error.message;
         console.log(errorMsg);
       });
-    event.preventDefault();
   };
   return (
     <div className="container mt-5">
@@ -67,6 +71,7 @@ function App() {
               placeholder="Password"
               required
             />
+            <p className="text-danger"> {error}</p>
             <Form.Control.Feedback type="invalid">
               Please provide a valid Password.
             </Form.Control.Feedback>
